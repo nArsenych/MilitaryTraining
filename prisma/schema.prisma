@@ -23,7 +23,7 @@ model Course {
   endDate        DateTime?
   createdAt      DateTime   @default(now())
   levelId        String?
-  price          Float?     @db.Float
+  price          Float?     @default(0.0) @db.Float
   category       Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   city           City?       @relation(fields: [cityId], references: [id])
   // startDate      StartDate? @relation(fields: [startDateId], references: [id])

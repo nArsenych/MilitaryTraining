@@ -23,9 +23,10 @@ import Link from "next/link";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import toast from "react-hot-toast";
-import { DatePicker } from "../ui/date-picker";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Trash } from "lucide-react";
-import Delete from "../custom/Delete";
+import Delete from "@/components/custom/Delete";
+import PublishButton from "@/components/custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -36,14 +37,14 @@ const formSchema = z.object({
     message: "Category is required",
   }),
   levelId: z.string().min(1, {
-    message: "Leevel is required",
+    message: "Level is required",
   }),
   imageUrl: z.string().optional(),
   price: z.coerce.number().optional(),
-  startAge: z.coerce.number().optional(),
+  startAge: z.coerce.number(),
   endAge: z.coerce.number().optional(),
-  startDate: z.coerce.date().optional(),
-  endDate: z.coerce.date().optional(),
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
   cityId: z.string().min(1, {
     message: "City is required",
   }),
@@ -63,9 +64,10 @@ interface EditCourseFormProps {
     label: string;
     value: string
   }[];
+  isCompleted: boolean;
 }
 
-const EditCourseForm = ({ course, categories, levels, cities }: EditCourseFormProps) => {
+const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: EditCourseFormProps) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -113,8 +115,16 @@ const EditCourseForm = ({ course, categories, levels, cities }: EditCourseFormPr
   return (
     <>
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
-        <div className="flex gap-5 items-start mt-[5vh] ml-[120vh]">
-          <Button variant="outline">Publish</Button>
+      <div className="flex gap-5">
+          Заповніть інформацію про курс
+        </div>
+        <div className="flex gap-5 items-start">
+          <PublishButton
+            disabled={!isCompleted}
+            courseId={course.id}
+            isPublished={course.isPublished}
+            page="Course"
+          />
           <Delete item="course" courseId={course.id} />
         </div>
       </div>
@@ -142,7 +152,7 @@ const EditCourseForm = ({ course, categories, levels, cities }: EditCourseFormPr
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Опис <span className="text-red-500">*</span>
+                  Опис 
                 </FormLabel>
                 <FormControl>
                   <RichEditor
@@ -217,7 +227,7 @@ const EditCourseForm = ({ course, categories, levels, cities }: EditCourseFormPr
               render={({ field }) => (
                 <FormItem className="flex flex-col">
                   <FormLabel>
-                    Максимальний вік <span className="text-red-500">*</span>
+                    Максимальний вік
                   </FormLabel>
                   <FormControl>
                     <Input

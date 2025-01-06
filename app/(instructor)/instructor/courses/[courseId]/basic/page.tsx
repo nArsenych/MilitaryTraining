@@ -1,4 +1,5 @@
 import EditCourseForm from '@/components/courses/EditCourseForm'
+import AlertBanner from '@/components/custom/AlertBaner';
 import { db } from '@/lib/db';
 import { auth, Organization } from '@clerk/nextjs/server';
 import { redirect } from 'next/navigation';
@@ -32,8 +33,27 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
 
   const city = await db.city.findMany();
 
+  const requiredFields = [
+    course.title,
+    course.categoryId,
+    course.cityId,
+    course.levelId,
+    course.startAge,
+    course.startDate,
+    course.endDate,
+  ];
+  const requiredFieldsCount = requiredFields.length;
+  const missingFields = requiredFields.filter((field) => !Boolean(field));
+  const missingFieldsCount = missingFields.length;
+  const isCompleted = requiredFields.every(Boolean);
+
   return (
     <div className="px-10">
+      <AlertBanner
+        isCompleted={isCompleted}
+        missingFieldsCount={missingFieldsCount}
+        requiredFieldsCount={requiredFieldsCount}
+      />
       <EditCourseForm course={course} categories={categories.map((category) => ({
         label: category.name,
         value: category.id,
@@ -45,7 +65,8 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
         cities={city.map((city) => ({
           label: city.name,
           value: city.id,
-        }))} />
+        }))}
+        isCompleted={isCompleted} />
     </div>
   )
 }

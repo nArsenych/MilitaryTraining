@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model Course {
+  id             String     @id @default(uuid())
+  organizationId String
+  title          String     @db.Text
+  startAge       Int?       @db.Int     
+  endAge         Int?       @db.Int
+  description    String?    @db.Text
+  imageUrl       String?    @db.Text
+  isPublished    Boolean    @default(false)
+  categoryId     String
+  cityId         String?
+  startDate      DateTime?
+  endDate        DateTime?
+  createdAt      DateTime   @default(now())
+  levelId        String?
+  price          Float?     @db.Float
+  category       Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  city           City?       @relation(fields: [cityId], references: [id])
+  // startDate      StartDate? @relation(fields: [startDateId], references: [id])
+  // endDate        EndDate?   @relation(fields: [endDateId], references: [id])
+  level          Level?     @relation(fields: [levelId], references: [id])
+
+  @@index([categoryId])
+  @@index([cityId])
+  // @@index([startDateId])
+  // @@index([endDateId])
+  @@index([levelId])
+}
+
+model Category {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+model City {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+
+// model StartDate {
+//   id      String   @id @default(uuid())
+//   start   DateTime
+//   courses Course[]
+// }
+
+// model EndDate {
+//   id      String   @id @default(uuid())
+//   start   DateTime
+//   courses Course[]
+// }
+
+model Level {
+  id      String   @id @default(uuid())
+  name    String   @unique
+  courses Course[]
+}
+

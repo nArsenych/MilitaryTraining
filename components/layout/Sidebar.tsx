@@ -8,7 +8,10 @@ const Sidebar = () => {
     const pathname = usePathname();
 
     const sidebarRoutes = [
-        { icon: <MonitorPlay />, label: "Courses", path: "/instructor/courses" },
+        { 
+            icon: <MonitorPlay />, 
+            label: "Courses", 
+            path: "/instructor/courses" },
         {
             icon: <BarChart4 />,
             label: "Performance",

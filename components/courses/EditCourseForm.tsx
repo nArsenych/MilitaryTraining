@@ -115,9 +115,10 @@ const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: Edi
   return (
     <>
       <div className="flex flex-col gap-2 sm:flex-row sm:justify-between mb-7">
-      <div className="flex gap-5">
-          Заповніть інформацію про курс
+        <div className="flex gap-5">
+          <p>Заповніть інформацію про курс</p>
         </div>
+
         <div className="flex gap-5 items-start">
           <PublishButton
             disabled={!isCompleted}

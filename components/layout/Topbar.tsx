@@ -5,14 +5,26 @@ import Image from 'next/image';
 import { Search } from "lucide-react";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import router from "next/router";
+import { useRouter } from "next/navigation";
 
 const Topbar = () => {
     const { isSignedIn } = useAuth();
+    const router = useRouter();
 
     const topRoutes = [
-        { label: "Instructor", path: "/instructor/courses" },
-        { label: "Learning", path: "/learning" },
+        { label: "Створення курсів", path: "/instructor/courses" },
     ];
+
+    const [searchInput, setSearchInput] = useState("");
+
+    const handleSearch = () => {
+        if (searchInput.trim() !== "") {
+            router.push(`/search?query=${searchInput}`);
+        }
+        setSearchInput("");
+    };
 
     return (
         <>
@@ -24,17 +36,24 @@ const Topbar = () => {
             >
                 <div className="relative flex justify-between items-center p-4">
 
-                    <div className="max-md:hidden w-[400px] rounded-full flex">
-                        <input
-                            className="flex-grow bg-[#FFF8EB] rounded-l-full border-none outline-none text-sm pl-4 py-3"
-                            placeholder="Search for courses"
-                        />
-                        <button
-                            className="bg-[#EBAC66] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#EBAC66]/80">
-                            <Search className="h-4 w-4" />
-                        </button>
+                    <div className="max-md:hidden w-full flex justify-between items-center gap-4">
+                        <div className="max-md:hidden w-[400px] rounded-full flex">
+                            <input
+                                className="flex-grow bg-[#FFF8EB] rounded-l-full border-none outline-none text-sm pl-4 py-3"
+                                placeholder="Search for courses"
+                                value={searchInput}
+                                onChange={(e) => setSearchInput(e.target.value)}
+                            />
+                            <button
+                                className="bg-[#FDAB04] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
+                                disabled={searchInput.trim() === ""}
+                                onClick={handleSearch}
+                            >
+                                <Search className="h-4 w-4" />
+                            </button>
+                        </div>
 
-                        <div className="flex gap-6 items-center">
+                        <div className="flex items-center gap-6 ml-auto">
                             <div className="max-sm:hidden flex gap-6">
                                 {topRoutes.map((route) => (
                                     <Link
@@ -55,6 +74,16 @@ const Topbar = () => {
                         </div>
                     </div>
                 </div>
+                <div className="mt-[17vh] ml-[5vh]">
+                    <p
+                        className="text-6xl text-[#EBAC66] font-sans leading-relaxed tracking-wider"
+                        style={{ fontFamily: "KyivType Sans", wordSpacing: "0.5rem", whiteSpace: "pre-wrap" }}
+                    >
+                        КУРСИ ПО <br />
+                        ВІЙСЬКОВІЙ ПІДГОТОВЦІ
+                    </p>
+                </div>
+
             </div>
         </>
     );

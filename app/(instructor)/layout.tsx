@@ -13,7 +13,7 @@ const Instructorlayout = async ({ children }: { children: React.ReactNode }) => 
 
   return (
     <div className="h-full flex flex-col">
-      <Topbar />
+      {/* <Topbar /> */}
       <div className="flex-1 flex h-full">
         <Sidebar />
         <div className="flex-1">{children}</div>

@@ -1,16 +1,21 @@
-import { db } from "@/lib/db";
-import CourseCard from "@/components/courses/CourseCard";
 import getCoursesByCity from "@/app/actions/getCoursesCities";
+import CourseCard from "@/components/courses/CourseCard";
 import Cities from "@/components/custom/Cities";
+import { db } from "@/lib/db";
 
-
-export default async function Citiess() {
+const CoursesByCity = async ({
+  params,
+}: {
+  params: { cityId: string };
+}) => {
   const cities = await db.city.findMany({
     orderBy: {
       name: "asc",
     },
   });
-  const courses = await getCoursesByCity(null);
+
+  const courses = await getCoursesByCity(params.cityId);
+
   return (
     <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
       <Cities cities={cities} selectedCity={null} />
@@ -22,4 +27,6 @@ export default async function Citiess() {
       
     </div>
   );
-}
+};
+
+export default CoursesByCity;

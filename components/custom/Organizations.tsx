@@ -4,6 +4,7 @@ import { Course } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Home } from "lucide-react";
 
 interface OrganizationsProps {
   courses: Course[];
@@ -12,44 +13,37 @@ interface OrganizationsProps {
 
 interface OrganizationInfo {
   id: string;
-  fullName: string;
+  name: string;
 }
 
 const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) => {
   const router = useRouter();
   const [organizations, setOrganizations] = useState<OrganizationInfo[]>([]);
-  const [loading, setLoading] = useState(true); // Додаємо стан для відстеження завантаження
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        // Отримуємо унікальні організації
         const uniqueOrgIds = Array.from(new Set(courses.map(course => course.organizationId)));
-        console.log("Unique organization IDs:", uniqueOrgIds); // Логуємо ID організацій
+        console.log("Unique organization IDs:", uniqueOrgIds);
         
         const orgs = await Promise.all(
           uniqueOrgIds.map(async (orgId) => {
-            if (!orgId) return null; // Перевіряємо на null/undefined
+            if (!orgId) return null;
             
             try {
-              const response = await fetch(`/api/organizations/${orgId}`, { // Змінюємо URL на API роут
-                headers: {
-                  'Content-Type': 'application/json',
-                }
-              });
+              const response = await fetch(`/api/organizations/${orgId}`);
               
               if (!response.ok) {
                 throw new Error(`Error fetching organization ${orgId}`);
               }
 
               const data = await response.json();
-              console.log(`Organization data for ${orgId}:`, data); // Логуємо дані організації
+              console.log(`Organization data for ${orgId}:`, data);
               
               return {
                 id: orgId,
-                fullName: data.firstName && data.lastName 
-                  ? `${data.firstName} ${data.lastName}`
-                  : "Unknown User"
+                name: data.name || "Unknown Organization" // Тепер використовуємо поле name з OrganizationProfile
               };
             } catch (error) {
               console.error(`Error fetching organization ${orgId}:`, error);
@@ -59,7 +53,7 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
         );
         
         const validOrgs = orgs.filter((org): org is OrganizationInfo => org !== null);
-        console.log("Final organizations data:", validOrgs); // Логуємо фінальні дані
+        console.log("Final organizations data:", validOrgs);
         setOrganizations(validOrgs);
       } catch (error) {
         console.error("Error in fetchOrganizations:", error);
@@ -75,17 +69,25 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
     router.push(organizationId ? `/organizations/${organizationId}` : "/organizations");
   };
 
-  if (loading) {
-    return <div>Loading organizations...</div>;
-  }
+  const onHomeClick = () => {
+    router.push("/");
+  };
 
   return (
     <div className="flex flex-wrap px-4 gap-7 justify-center my-10">
       <Button
+        variant="outline"
+        onClick={onHomeClick}
+        className="gap-2"
+      >
+        <Home size={20} />
+      </Button>
+      
+      <Button
         variant={selectedOrganization === null ? "default" : "outline"}
         onClick={() => onClick(null)}
       >
-        All Teachers
+        Всі організації
       </Button>
       {organizations.map((org) => (
         <Button
@@ -93,7 +95,7 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
           variant={selectedOrganization === org.id ? "default" : "outline"}
           onClick={() => onClick(org.id)}
         >
-          {org.fullName}
+          {org.name}
         </Button>
       ))}
     </div>

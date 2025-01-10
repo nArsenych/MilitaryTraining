@@ -8,32 +8,68 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Course {
-  id             String     @id @default(uuid())
-  organizationId String
-  title          String     @db.Text
-  startAge       Int?       @db.Int     
-  endAge         Int?       @db.Int
-  description    String?    @db.Text
-  imageUrl       String?    @db.Text
-  isPublished    Boolean    @default(false)
-  categoryId     String
-  cityId         String?
-  startDate      DateTime?
-  endDate        DateTime?
-  createdAt      DateTime   @default(now())
-  levelId        String?
-  price          Float?     @default(0.0) @db.Float
-  category       Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  city           City?       @relation(fields: [cityId], references: [id])
-  // startDate      StartDate? @relation(fields: [startDateId], references: [id])
-  // endDate        EndDate?   @relation(fields: [endDateId], references: [id])
-  level          Level?     @relation(fields: [levelId], references: [id])
+enum UserType {
+  ORGANIZATION
+  CLIENT
+}
 
+model User {
+  id            String       @id
+  type          UserType?
+  organizationProfile OrganizationProfile?
+  clientProfile ClientProfile?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrganizationProfile {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  description String?   @db.Text
+  logoUrl     String?   @db.Text
+  courses     Course[]
+
+  @@index([userId])
+}
+
+model ClientProfile {
+  id        String    @id @default(uuid())
+  userId    String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName String?
+  lastName  String?
+  age       Int?
+  phone     String?
+  
+  @@index([userId])
+}
+
+model Course {
+  id                String    @id @default(uuid())
+  organizationId    String
+  organization      OrganizationProfile @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  title            String     @db.Text
+  startAge         Int?       @db.Int     
+  endAge           Int?       @db.Int
+  description      String?    @db.Text
+  imageUrl         String?    @db.Text
+  isPublished      Boolean    @default(false)
+  categoryId       String
+  cityId           String?
+  startDate        DateTime?
+  endDate          DateTime?
+  createdAt        DateTime   @default(now())
+  levelId          String?
+  price            Float?     @default(0.0) @db.Float
+  category         Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  city             City?      @relation(fields: [cityId], references: [id])
+  level            Level?     @relation(fields: [levelId], references: [id])
+
+  @@index([organizationId])
   @@index([categoryId])
   @@index([cityId])
-  // @@index([startDateId])
-  // @@index([endDateId])
   @@index([levelId])
 }
 
@@ -49,21 +85,8 @@ model City {
   courses Course[]
 }
 
-// model StartDate {
-//   id      String   @id @default(uuid())
-//   start   DateTime
-//   courses Course[]
-// }
-
-// model EndDate {
-//   id      String   @id @default(uuid())
-//   start   DateTime
-//   courses Course[]
-// }
-
 model Level {
   id      String   @id @default(uuid())
   name    String   @unique
   courses Course[]
 }
-

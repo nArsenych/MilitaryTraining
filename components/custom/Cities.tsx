@@ -2,32 +2,50 @@
 
 import { City } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { Home } from "lucide-react";
 
-interface CategoriesProps {
+interface CitiesProps {
   cities: City[];
   selectedCity: string | null;
 }
 
-const Cities = ({ cities, selectedCity }: CategoriesProps) => {
+const Cities = ({ cities, selectedCity }: CitiesProps) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   const onClick = (cityId: string | null) => {
-    router.push(cityId ? `/cities/${cityId}` : "/");
+    router.push(cityId ? `/cities/${cityId}` : "/cities");
   };
+
+  const onHomeClick = () => {
+    router.push("/");
+  };
+
+  const currentCityId = pathname.startsWith('/cities/') 
+    ? pathname.split('/cities/')[1] 
+    : null;
 
   return (
     <div className="flex flex-wrap px-4 gap-7 justify-center my-10">
       <Button
-        variant={selectedCity === null ? "default" : "outline"}
+        variant="outline"
+        onClick={onHomeClick}
+        className="gap-2"
+      >
+        <Home size={20} />
+      </Button>
+      
+      <Button
+        variant={currentCityId === null ? "default" : "outline"}
         onClick={() => onClick(null)}
       >
-        All Categories
+        Всі міста
       </Button>
       {cities.map((city) => (
         <Button
           key={city.id}
-          variant={selectedCity === city.id ? "default" : "outline"}
+          variant={currentCityId === city.id ? "default" : "outline"}
           onClick={() => onClick(city.id)}
         >
           {city.name}

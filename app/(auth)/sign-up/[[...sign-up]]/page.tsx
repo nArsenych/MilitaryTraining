@@ -8,7 +8,7 @@ export default function SignUpPage() {
   
   return (
     <SignUp
-      afterSignUpUrl="/auth/select-type"
+      afterSignUpUrl="/select-type"
     />
   );
 }

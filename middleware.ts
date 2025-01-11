@@ -7,6 +7,6 @@ export const config = {
     "/((?!.+\\.[\\w]+$|_next).*)",
     "/",
     "/(api|trpc)(.*)",
-    "/auth/select-type"
+    "/select-type"
   ],
 };

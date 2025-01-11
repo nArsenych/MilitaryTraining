@@ -1,9 +1,8 @@
-import EditCourseForm from '@/components/courses/EditCourseForm'
-import AlertBanner from '@/components/custom/AlertBaner';
-import { db } from '@/lib/db';
-import { auth, Organization } from '@clerk/nextjs/server';
-import { redirect } from 'next/navigation';
-import React from 'react'
+import EditCourseForm from "@/components/courses/EditCourseForm";
+import AlertBanner from "@/components/custom/AlertBaner";
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
   const { userId } = await auth();
@@ -14,19 +13,19 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
 
   const course = await db.course.findUnique({
     where: {
-      id: params.courseId,
-      organizationId: userId
+      id: params.courseId, 
+      organizationId: userId,
     },
-  })
+  });
 
   if (!course) {
-    return redirect('/instructor/courses')
+    return redirect("/instructor/courses");
   }
 
   const categories = await db.category.findMany({
     orderBy: {
-      name: "asc"
-    }
+      name: "asc",
+    },
   });
 
   const level = await db.level.findMany();
@@ -54,10 +53,12 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
         missingFieldsCount={missingFieldsCount}
         requiredFieldsCount={requiredFieldsCount}
       />
-      <EditCourseForm course={course} categories={categories.map((category) => ({
-        label: category.name,
-        value: category.id,
-      }))}
+      <EditCourseForm 
+        course={course} 
+        categories={categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }))}
         levels={level.map((level) => ({
           label: level.name,
           value: level.id,
@@ -66,9 +67,10 @@ const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
           label: city.name,
           value: city.id,
         }))}
-        isCompleted={isCompleted} />
+        isCompleted={isCompleted} 
+      />
     </div>
-  )
-}
+  );
+};
 
-export default CourseBasics
+export default CourseBasics;

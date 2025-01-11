@@ -31,14 +31,13 @@ const formSchema = z.object({
 
 interface CreateCourseFormProps {
     categories: {
-        label: string; // name of category
-        value: string; // categoryId
+        label: string; 
+        value: string; 
     }[];
 }
 
 const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
     const router = useRouter();
-    // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -47,7 +46,6 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
         },
     })
 
-    // 2. Define a submit handler.
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             const response = await axios.post("/api/courses", values);

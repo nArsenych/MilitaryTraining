@@ -11,7 +11,7 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
   
 
   return (
-    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 my-4 text-sm font-medium">
+    <div className="hidden md:flex flex-col w-64 border-r shadow-md px-3 text-sm font-medium bg-[#4E4C4B] pt-4">
       <h1 className="text-lg font-bold text-center mb-4 text-[#ebac66]">{course.title}</h1>
        
       <Link

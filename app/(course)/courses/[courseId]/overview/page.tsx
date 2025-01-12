@@ -64,49 +64,49 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
           height={30}
           className="rounded-full"
         />
-        <p className="font-bold text-[#F1CDA6]">Організація:</p>
+        <p className="text-[#ebac66] font-bold">Організація:</p>
         <p>{formatFullName(instructor.first_name, instructor.last_name)}</p>
       </div>
 
       <div className="flex gap-2">
-        <p className="font-bold text-[#F1CDA6]">Ціна:</p>
+        <p className="text-[#ebac66] font-bold">Ціна:</p>
         <p>${course.price}</p>
       </div>
 
       <div className="flex gap-2">
-        <p className="font-bold text-[#F1CDA6]">Для кого розрахований курс:</p>
+        <p className=" text-[#ebac66] font-bold">Для кого розрахований курс:</p>
         <p>{level?.name}</p>
       </div>
 
       <div className="flex gap-2">
-        <p className="font-bold text-[#F1CDA6]">Де буде проходити:</p>
+        <p className=" text-[#ebac66] font-bold">Де буде проходити:</p>
         <p>{city?.name}</p>
       </div>
 
       <div className="flex gap-4">
         <div className="flex gap-2">
-          <p className="font-bold text-[#F1CDA6]">Дата початку:</p>
+          <p className=" text-[#ebac66] font-bold">Дата початку:</p>
           <p>{course.startDate?.toLocaleDateString()}</p>
         </div>
         <div className="flex gap-2">
-          <p className="font-bold text-[#F1CDA6]">Дата закінчення:</p>
+          <p className="text-[#ebac66] font-bold">Дата закінчення:</p>
           <p>{course.endDate?.toLocaleDateString()}</p>
         </div>
       </div>
 
       <div className="flex gap-4">
         <div className="flex gap-2">
-          <p className="font-bold text-[#F1CDA6]">Від якого віку:</p>
+          <p className=" text-[#ebac66] font-bold">Від якого віку:</p>
           <p>{course.startAge}</p>
         </div>
         <div className="flex gap-2">
-          <p className="font-bold text-[#F1CDA6]">До якого віку:</p>
+          <p className="text-[#ebac66] font-bold">До якого віку:</p>
           <p>{course.endAge}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
-        <p className="font-bold text-[#F1CDA6]">Опис:</p>
+        <p className="text-[#ebac66] font-bold">Опис:</p>
         <ReadText value={course.description!} />
       </div>
     </div>

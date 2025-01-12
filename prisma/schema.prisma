@@ -28,6 +28,7 @@ model Course {
   category       Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   city           City?     @relation(fields: [cityId], references: [id])
   level          Level?    @relation(fields: [levelId], references: [id])
+  profile        Profile?  @relation(fields: [organizationId], references: [id])
 
   @@index([organizationId])
   @@index([categoryId])
@@ -53,6 +54,20 @@ model Level {
   courses Course[]
 }
 
+model Profile {
+  id                String   @id @default(uuid())
+  full_name         String   @unique
+  isOrganization    Boolean   @default(false)
+  description       String?   @db.Text
+  age               Int?
+  phone_number      String?   @db.Text
+  intsagram         String?   @db.Text
+  telegram          String?   @db.Text
+  facebook          String?   @db.Text
+  isMilitary        Boolean   @default(false)
+  courses           Course[]
+}
+
 model Purchase {
   id         String @id @default(uuid())
   customerId String 
@@ -65,13 +80,4 @@ model Purchase {
 
   @@index([courseId])
   @@unique([customerId, courseId])
-}
-
-model StripeCustomer {
-  id               String @id @default(uuid())
-  customerId       String @unique
-  stripeCustomerId String @unique
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
 }

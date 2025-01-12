@@ -12,7 +12,7 @@ export default async function Categoriess() {
   });
   const courses = await getCoursesByCategory(null);
   return (
-    <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
+    <div className="md:px-10 xl:px-16 pb-16 bg-[#4E4C4B] min-h-screen pt-5">
       <Categories categories={categories} selectedCategory={null} />
       <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course) => (

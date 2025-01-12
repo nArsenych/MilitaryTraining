@@ -17,7 +17,7 @@ const CoursesByCity = async ({
   const courses = await getCoursesByCity(params.cityId);
 
   return (
-    <div className="md:mt-5 md:px-10 xl:px-16 pb-16">
+    <div className="md:px-10 xl:px-16 pb-16 bg-[#4E4C4B] min-h-screen pt-5">
       <Cities cities={cities} selectedCity={null} />
       <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course) => (

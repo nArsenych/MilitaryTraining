@@ -22,7 +22,7 @@ const CourseDetailsLayout = async ({children, params,}: {children: React.ReactNo
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#302E2B]">
+    <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex">
         <CourseSideBar course={course} studentId={userId} />
         <div className="flex-1">{children}</div>

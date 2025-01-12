@@ -13,37 +13,43 @@ interface OrganizationsProps {
 
 interface OrganizationInfo {
   id: string;
-  name: string;
+  fullName: string;
 }
 
 const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) => {
   const router = useRouter();
   const [organizations, setOrganizations] = useState<OrganizationInfo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
         const uniqueOrgIds = Array.from(new Set(courses.map(course => course.organizationId)));
-        console.log("Unique organization IDs:", uniqueOrgIds);
+        console.log("Unique organization IDs:", uniqueOrgIds); 
         
         const orgs = await Promise.all(
           uniqueOrgIds.map(async (orgId) => {
-            if (!orgId) return null;
+            if (!orgId) return null; 
             
             try {
-              const response = await fetch(`/api/organizations/${orgId}`);
+              const response = await fetch(`/api/organizations/${orgId}`, { 
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              });
               
               if (!response.ok) {
                 throw new Error(`Error fetching organization ${orgId}`);
               }
 
               const data = await response.json();
-              console.log(`Organization data for ${orgId}:`, data);
+              console.log(`Organization data for ${orgId}:`, data); // Логуємо дані організації
               
               return {
                 id: orgId,
-                name: data.name || "Unknown Organization" // Тепер використовуємо поле name з OrganizationProfile
+                fullName: data.firstName && data.lastName 
+                  ? `${data.firstName} ${data.lastName}`
+                  : "Unknown User"
               };
             } catch (error) {
               console.error(`Error fetching organization ${orgId}:`, error);
@@ -53,7 +59,7 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
         );
         
         const validOrgs = orgs.filter((org): org is OrganizationInfo => org !== null);
-        console.log("Final organizations data:", validOrgs);
+        console.log("Final organizations data:", validOrgs); // Логуємо фінальні дані
         setOrganizations(validOrgs);
       } catch (error) {
         console.error("Error in fetchOrganizations:", error);
@@ -73,6 +79,10 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
     router.push("/");
   };
 
+  if (loading) {
+    return <div>Loading organizations...</div>;
+  }
+
   return (
     <div className="flex flex-wrap px-4 gap-7 justify-center my-10">
       <Button
@@ -82,7 +92,6 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
       >
         <Home size={20} />
       </Button>
-      
       <Button
         variant={selectedOrganization === null ? "default" : "outline"}
         onClick={() => onClick(null)}
@@ -95,7 +104,7 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
           variant={selectedOrganization === org.id ? "default" : "outline"}
           onClick={() => onClick(org.id)}
         >
-          {org.name}
+          {org.fullName}
         </Button>
       ))}
     </div>

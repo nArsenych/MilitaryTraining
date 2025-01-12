@@ -1,16 +1,10 @@
-//import CourseSideBar from "@/components/layout/CourseSideBar";
+import CourseSideBar from "@/components/layout/CourseSideBar";
 import Topbar from "@/components/layout/Topbar";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-const CourseDetailsLayout = async ({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { courseId: string };
-}) => {
+const CourseDetailsLayout = async ({children, params,}: {children: React.ReactNode; params: { courseId: string };}) => {
   const { userId } = await auth();
 
   if (!userId) {
@@ -28,13 +22,14 @@ const CourseDetailsLayout = async ({
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* <div className="flex-1 flex">
+    <div className="min-h-screen flex flex-col bg-[#302E2B]">
+      <div className="flex-1 flex">
         <CourseSideBar course={course} studentId={userId} />
         <div className="flex-1">{children}</div>
-      </div> */}
+      </div>
     </div>
   );
+  
 };
 
 export default CourseDetailsLayout;

@@ -2,12 +2,12 @@
 
 import dynamic from "next/dynamic";
 import { useMemo } from "react";
-import "react-quill/dist/quill.bubble.css";
+import 'react-quill-new/dist/quill.snow.css';
 
 
 const ReadText = ({ value }: { value: string }) => {
   const ReactQuill = useMemo(
-    () => dynamic(() => import("react-quill"), { ssr: false }),
+    () => dynamic(() => import("react-quill-new")),
     []
   );
 

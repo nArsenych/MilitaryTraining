@@ -21,8 +21,7 @@ const CourseCard = async ({ course }: { course: Course }) => {
       },
     });
   }
-
-  // Handle missing first or last name with proper spacing
+  
   const formatFullName = (firstName?: string | null, lastName?: string | null): string => {
     if (!firstName && !lastName) return "Unknown User";
     if (!firstName) return lastName || "Unknown User";

@@ -4,33 +4,36 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-const CourseBasics = async ({ params }: { params: { courseId: string } }) => {
+interface PageProps {
+  params: { courseId: string };
+}
+
+const CourseBasics = async ({ params }: PageProps) => {
   const { userId } = await auth();
 
   if (!userId) {
     return redirect("/sign-in");
   }
 
-  const course = await db.course.findUnique({
-    where: {
-      id: params.courseId, 
-      organizationId: userId,
-    },
-  });
+  const [course, categories, level, city] = await Promise.all([
+    db.course.findUnique({
+      where: {
+        id: params.courseId,
+        organizationId: userId,
+      },
+    }),
+    db.category.findMany({
+      orderBy: {
+        name: "asc",
+      },
+    }),
+    db.level.findMany(),
+    db.city.findMany()
+  ]);
 
   if (!course) {
     return redirect("/instructor/courses");
   }
-
-  const categories = await db.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
-
-  const level = await db.level.findMany();
-
-  const city = await db.city.findMany();
 
   const requiredFields = [
     course.title,

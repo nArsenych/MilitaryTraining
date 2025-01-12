@@ -9,33 +9,38 @@ const ThreeIcon = () => {
 
   const ThreeIconRoutes = [
     {
-      icon: <Library />,
+      icon: <Library size={100} color="#ebac66" strokeWidth={1.5}/>,
       label: "Категорії",
       path: "/categories"
     },
     {
-      icon: <Users />,
+      icon: <Users  size={100} color="#ebac66" strokeWidth={1.5}/>,
       label: "Організації",
       path: "/organizations",
     },
     {
-      icon: <MapPin />,
+      icon: <MapPin  size={100} color="#ebac66" strokeWidth={1.5}/>,
       label: "Міста",
       path: "/cities",
     },
   ];
 
   return (
-    <div className="">
+    <div className="flex justify-center gap-20">
       {ThreeIconRoutes.map((route) => (
         <Link
           href={route.path}
           key={route.path}
-          className={`flex items-center gap-4 p-3 rounded-lg hover:bg-[#FFF8EB]
-                ${pathname.startsWith(route.path) && "bg-[#FDAB04] hover:bg-[#FDAB04]/80"}
-                `}
+          className={`flex flex-col items-center p-4 rounded-lg hover:bg-[#F1CDA6] transition-colors
+            ${pathname.startsWith(route.path) && "bg-[#FDAB04] hover:bg-[#FDAB04]/80"}
+          `}
         >
-          {route.icon} {route.label}
+          <div className="text-4xl">
+            {route.icon}
+          </div>
+          <span className="mt-2 text-lg font-medium text-[#ebac66]">
+            {route.label}
+          </span>
         </Link>
       ))}
     </div>

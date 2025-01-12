@@ -159,6 +159,7 @@ const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: Edi
                   <RichEditor
                     placeholder="Про що цей курс?"
                     {...field}
+                    value={field.value || ""}
                   />
                 </FormControl>
                 <FormMessage />

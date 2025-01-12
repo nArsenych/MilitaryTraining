@@ -14,7 +14,7 @@ const Topbar = () => {
     const router = useRouter();
 
     const topRoutes = [
-        { label: "Створення курсів", path: "/instructor/courses" },
+        { label: "Ваші курси", path: "/instructor/courses" },
     ];
 
     const [searchInput, setSearchInput] = useState("");
@@ -39,13 +39,14 @@ const Topbar = () => {
                     <div className="max-md:hidden w-full flex justify-between items-center gap-4">
                         <div className="max-md:hidden w-[400px] rounded-full flex">
                             <input
-                                className="flex-grow bg-[#FFF8EB] rounded-l-full border-none outline-none text-sm pl-4 py-3"
-                                placeholder="Search for courses"
+                                className="flex-grow bg-[#F1CDA6] rounded-l-full border-none outline-none text-sm pl-4 py-3 text-black"
+                                placeholder="Пошук курсів"
                                 value={searchInput}
                                 onChange={(e) => setSearchInput(e.target.value)}
                             />
+
                             <button
-                                className="bg-[#FDAB04] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
+                                className="bg-[#EBAC66] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
                                 disabled={searchInput.trim() === ""}
                                 onClick={handleSearch}
                             >
@@ -59,7 +60,7 @@ const Topbar = () => {
                                     <Link
                                         href={route.path}
                                         key={route.path}
-                                        className="text-sm font-medium hover:text-[#FDAB04]"
+                                        className="text-sm font-medium text-[#ebac66] hover:text-[#FDAB04]"
                                     >
                                         {route.label}
                                     </Link>
@@ -67,7 +68,7 @@ const Topbar = () => {
                             </div>
 
                             {isSignedIn ? (
-                                <UserButton afterSignOutUrl="/sign-in" />
+                                <UserButton />
                             ) : (
                                 <Link href="/sign-in"><Button>Sign In</Button></Link>
                             )}

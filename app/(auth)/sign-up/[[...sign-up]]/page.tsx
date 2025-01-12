@@ -8,6 +8,7 @@ export default function SignUpPage() {
   
   return (
     <SignUp
+      afterSignUpUrl="/select-type"
     />
   );
 }

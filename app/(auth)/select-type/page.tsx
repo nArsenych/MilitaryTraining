@@ -1,32 +1,39 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { UserType } from "@prisma/client";
+import { Button } from "@/components/ui/button";
 
-export default function SelectTypePage() {
+const SelectAccountType = () => {
   const router = useRouter();
   const { userId } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
 
-  const onSelect = async (type: UserType) => {
+  const onSelect = async (type: "ORGANIZATION" | "CLIENT") => {
     try {
       setIsLoading(true);
-      const response = await fetch("/api/user-type", {
-        method: "POST",
+
+      if (!userId) {
+        throw new Error("Unauthorized");
+      }
+
+      const response = await fetch("/api/profile", {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId, type }),
+        body: JSON.stringify({
+          isOrganization: type === "ORGANIZATION",
+        }),
       });
 
       if (!response.ok) {
-        throw new Error("Failed to set user type");
+        throw new Error("Failed to update profile");
       }
 
-      router.push(type === "ORGANIZATION" ? "/profile/organization" : "/profile/client");
+      router.push("/users/create-profile");
+      
     } catch (error) {
       console.error(error);
     } finally {
@@ -53,4 +60,6 @@ export default function SelectTypePage() {
       </div>
     </div>
   );
-}
+};
+
+export default SelectAccountType;

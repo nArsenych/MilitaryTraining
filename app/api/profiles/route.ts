@@ -10,17 +10,24 @@ export const POST = async (req: NextRequest) => {
       return new NextResponse("Unauthorized", { status: 401 })
     }
 
-    const { title, categoryId } = await req.json()
+    const { full_name, phone_number } = await req.json()
 
-    const newCourse = await db.course.create({
-      data: {
-        title,
-        categoryId,
-        organizationId: userId
+    const profile = await db.profile.upsert({
+      where: {
+        user_id: userId, 
+      },
+      create: {
+        full_name,
+        phone_number,
+        user_id: userId
+      },
+      update: {
+        full_name,
+        phone_number,
       }
     })
 
-    return NextResponse.json(newCourse, {status: 200 })
+    return NextResponse.json(profile, {status: 200 })
   } catch (err) {
     console.log("[courses_POST]", err)
     return new NextResponse("Internal Server Error", { status: 500 })

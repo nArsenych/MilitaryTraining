@@ -23,17 +23,49 @@ model Course {
   endDate        DateTime?
   createdAt      DateTime  @default(now())
   levelId        String?
-  purchches      Purchase[]
+  purchases      Purchase[]
   price          Float?    @default(0) @db.Float
+  
   category       Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  city           City?     @relation(fields: [cityId], references: [id])
-  level          Level?    @relation(fields: [levelId], references: [id])
-  profile        Profile?  @relation(fields: [organizationId], references: [id])
+  city           City?     @relation(fields: [cityId], references: [id], onDelete: Cascade)
+  level          Level?    @relation(fields: [levelId], references: [id], onDelete: Cascade)
+  organization   Profile?  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([categoryId])
   @@index([cityId])
   @@index([levelId])
+}
+
+model Profile {
+  id                String     @id @default(uuid())
+  user_id           String     @unique
+  full_name         String?    @db.Text
+  isOrganization    Boolean    @default(false)
+  description       String?    @db.Text
+  age               Int?
+  phone_number      String?    @db.Text
+  instagram         String?    @db.Text
+  telegram          String?    @db.Text
+  facebook          String?    @db.Text
+  isMilitary        Boolean?    @default(false)
+  createdCourses    Course[]   
+  enrolledCourses   Purchase[] 
+}
+
+model Purchase {
+  id         String   @id @default(uuid())
+  customerId String
+  courseId   String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  customer   Profile  @relation(fields: [customerId], references: [id])
+
+  @@index([courseId])
+  @@index([customerId])
+  @@unique([customerId, courseId])
 }
 
 model Category {
@@ -54,30 +86,3 @@ model Level {
   courses Course[]
 }
 
-model Profile {
-  id                String   @id @default(uuid())
-  full_name         String   @unique
-  isOrganization    Boolean   @default(false)
-  description       String?   @db.Text
-  age               Int?
-  phone_number      String?   @db.Text
-  intsagram         String?   @db.Text
-  telegram          String?   @db.Text
-  facebook          String?   @db.Text
-  isMilitary        Boolean   @default(false)
-  courses           Course[]
-}
-
-model Purchase {
-  id         String @id @default(uuid())
-  customerId String 
-
-  courseId String
-  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-
-  @@index([courseId])
-  @@unique([customerId, courseId])
-}

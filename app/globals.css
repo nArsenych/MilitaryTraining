@@ -169,6 +169,9 @@ body,
   height: 40vh; 
 }
 
+.__variable_1e4310 {
+  background: #48433C;
+}
 
 @import "@uploadthing/react/styles.css";
 

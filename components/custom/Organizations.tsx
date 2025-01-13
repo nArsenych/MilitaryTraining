@@ -43,13 +43,20 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
               }
 
               const data = await response.json();
-              console.log(`Organization data for ${orgId}:`, data); // Логуємо дані організації
+              console.log(`Organization data for ${orgId}:`, data);
+              
+              let fullName = "Unknown User";
+              if (data.firstName && data.lastName) {
+                fullName = `${data.firstName} ${data.lastName}`;
+              } else if (data.firstName) {
+                fullName = data.firstName;
+              } else if (data.lastName) {
+                fullName = data.lastName;
+              }
               
               return {
                 id: orgId,
-                fullName: data.firstName && data.lastName 
-                  ? `${data.firstName} ${data.lastName}`
-                  : "Unknown User"
+                fullName
               };
             } catch (error) {
               console.error(`Error fetching organization ${orgId}:`, error);
@@ -59,7 +66,7 @@ const Organizations = ({ courses, selectedOrganization }: OrganizationsProps) =>
         );
         
         const validOrgs = orgs.filter((org): org is OrganizationInfo => org !== null);
-        console.log("Final organizations data:", validOrgs); // Логуємо фінальні дані
+        console.log("Final organizations data:", validOrgs);
         setOrganizations(validOrgs);
       } catch (error) {
         console.error("Error in fetchOrganizations:", error);

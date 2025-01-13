@@ -54,7 +54,7 @@ export default async function Home() {
         <div className="mt-12 px-8">
           <ThreeIcon />
         </div>
-        <div className="mt-12">
+        <div className="mt-9">
           <CalendarCourses courses={coursesWithOrganization} />
         </div>
       </div>

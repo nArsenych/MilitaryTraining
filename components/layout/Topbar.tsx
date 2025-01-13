@@ -1,22 +1,19 @@
 "use client"
 
 import Link from "next/link"
-import Image from 'next/image';
 import { Search } from "lucide-react";
 import { useAuth, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
-import router from "next/router";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-const Topbar = () => {
+interface TopbarProps {
+  isOrganization: boolean;
+}
+
+const Topbar = ({ isOrganization }: TopbarProps) => {
     const { isSignedIn } = useAuth();
     const router = useRouter();
-
-    const topRoutes = [
-        { label: "Ваші курси", path: "/instructor/courses" },
-    ];
-
     const [searchInput, setSearchInput] = useState("");
 
     const handleSearch = () => {
@@ -35,7 +32,6 @@ const Topbar = () => {
                 }}
             >
                 <div className="relative flex justify-between items-center p-4">
-
                     <div className="max-md:hidden w-full flex justify-between items-center gap-4">
                         <div className="max-md:hidden w-[400px] rounded-full flex">
                             <input
@@ -44,7 +40,6 @@ const Topbar = () => {
                                 value={searchInput}
                                 onChange={(e) => setSearchInput(e.target.value)}
                             />
-
                             <button
                                 className="bg-[#EBAC66] rounded-r-full border-none outline-none cursor-pointer px-4 py-3 hover:bg-[#FDAB04]/80"
                                 disabled={searchInput.trim() === ""}
@@ -56,15 +51,14 @@ const Topbar = () => {
 
                         <div className="flex items-center gap-6 ml-auto">
                             <div className="max-sm:hidden flex gap-6">
-                                {topRoutes.map((route) => (
+                                {isSignedIn && isOrganization && (
                                     <Link
-                                        href={route.path}
-                                        key={route.path}
+                                        href="/instructor/courses"
                                         className="text-sm font-medium text-[#ebac66] hover:text-[#FDAB04]"
                                     >
-                                        {route.label}
+                                        Ваші курси
                                     </Link>
-                                ))}
+                                )}
                             </div>
 
                             {isSignedIn ? (
@@ -84,7 +78,6 @@ const Topbar = () => {
                         ВІЙСЬКОВІЙ ПІДГОТОВЦІ
                     </p>
                 </div>
-
             </div>
         </>
     );

@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
 import { Course } from "@prisma/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import Link from "next/link";
 
 interface CalendarCoursesProps {
     courses: (Course & {
@@ -49,7 +50,7 @@ const CalendarCourses = ({ courses }: CalendarCoursesProps) => {
     };
 
     return (
-        <div className="flex gap-4">
+        <div className="flex gap-4 h-[50vh]">
             <div className="border rounded-lg p-4">
                 <Calendar
                     mode="single"
@@ -61,7 +62,7 @@ const CalendarCourses = ({ courses }: CalendarCoursesProps) => {
                     modifiersStyles={{
                         hasCourses: {
                             backgroundColor: "#F1CDA6",
-                            fontWeight: "bold", 
+                            fontWeight: "bold",
                         },
                     }}
                     className="rounded-md"
@@ -81,22 +82,30 @@ const CalendarCourses = ({ courses }: CalendarCoursesProps) => {
                         {selectedCourses.length > 0 ? (
                             <div className="space-y-4">
                                 {selectedCourses.map((course) => (
-                                    <Card key={course.id} className="p-4">
-                                        <h3 className="font-semibold text-lg mb-2">{course.title}</h3>
-                                        <div className="text-sm text-muted-foreground space-y-1">
-                                            <p>Категорія: {course.category.name}</p>
-                                            <p>Організатор: {course.organizationName}</p>
-                                            {course.startDate && course.endDate && (
-                                                <p>
-                                                    Період: {format(new Date(course.startDate), "dd.MM.yyyy")} -{" "}
-                                                    {format(new Date(course.endDate), "dd.MM.yyyy")}
-                                                </p>
-                                            )}
-                                            {course.startAge && (
-                                                <p>Вік: від {course.startAge} років</p>
-                                            )}
-                                        </div>
-                                    </Card>
+
+                                    <Link
+                                        key={course.id}
+                                        href={`/courses/${course.id}/overview`}
+                                        className="block hover:no-underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                    >
+
+                                        <Card key={course.id} className="p-4">
+                                            <h3 className="font-semibold text-lg mb-2">{course.title}</h3>
+                                            <div className="text-sm text-muted-foreground space-y-1">
+                                                <p>Категорія: {course.category.name}</p>
+                                                <p>Організатор: {course.organizationName}</p>
+                                                {course.startDate && course.endDate && (
+                                                    <p>
+                                                        Період: {format(new Date(course.startDate), "dd.MM.yyyy")} -{" "}
+                                                        {format(new Date(course.endDate), "dd.MM.yyyy")}
+                                                    </p>
+                                                )}
+                                                {course.startAge && (
+                                                    <p>Вік: від {course.startAge} років</p>
+                                                )}
+                                            </div>
+                                        </Card>
+                                    </Link>
                                 ))}
                             </div>
                         ) : (

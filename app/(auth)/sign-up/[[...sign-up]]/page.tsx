@@ -7,8 +7,6 @@ export default function SignUpPage() {
   const router = useRouter();
   
   return (
-    <SignUp
-      afterSignUpUrl="/select-type"
-    />
+    <SignUp afterSignUpUrl="/select-type"/>
   );
 }

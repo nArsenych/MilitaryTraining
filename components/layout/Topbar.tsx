@@ -63,6 +63,8 @@ const Topbar = () => {
                                 )}
                             </div>
 
+                            <UserButton />   
+
                             {isSignedIn ? (
                                 isLoading ? (
                                     <Button disabled>Завантаження...</Button>

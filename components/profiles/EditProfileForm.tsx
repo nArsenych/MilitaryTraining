@@ -37,9 +37,9 @@ const formSchema = z.object({
     phone_number: z.string().min(10, {}),
     isMilitary: z.boolean().optional(),
     age: z.coerce.number().optional(),
-    instagram: z.string(),
-    facebook: z.string(),
-    telegram: z.string(),
+    instagram: z.string().optional(),
+    facebook: z.string().optional(),
+    telegram: z.string().optional(),
 })
 
 interface EditProfileFormProps {
@@ -57,6 +57,7 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
             full_name: profile.full_name || "",
             description: profile.description || "",
             phone_number: profile.phone_number || "",
+            isMilitary: profile.isMilitary || undefined,
             age: profile.age || undefined,
             instagram: profile.instagram || undefined,
             telegram: profile.telegram || undefined,
@@ -233,7 +234,16 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
                                 </FormItem>
                             )}
                         />
+                        
                     </div>
+                    <div className="flex gap-5">
+                            <Link href="/instructor/courses">
+                                <Button variant="outline" type="button">
+                                    Скасувати
+                                </Button>
+                            </Link>
+                            <Button type="submit">Зберегти</Button>
+                        </div>
                 </form>
             </Form>
         </>

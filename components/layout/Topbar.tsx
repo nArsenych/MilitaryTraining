@@ -6,12 +6,14 @@ import { useAuth, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useProfile } from "@/hooks/UseProfile";
 
 interface TopbarProps {
-  isOrganization: boolean;
+    isOrganization: boolean;
 }
 
-const Topbar = ({ isOrganization }: TopbarProps) => {
+const Topbar = () => {
+    const { profileId, isOrganization, isLoading } = useProfile();
     const { isSignedIn } = useAuth();
     const router = useRouter();
     const [searchInput, setSearchInput] = useState("");
@@ -62,9 +64,17 @@ const Topbar = ({ isOrganization }: TopbarProps) => {
                             </div>
 
                             {isSignedIn ? (
-                                <UserButton />
+                                isLoading ? (
+                                    <Button disabled>Завантаження...</Button>
+                                ) : (
+                                    <Link href={`/users/profiles/${profileId}`}>
+                                        <Button>Мій профіль</Button>
+                                    </Link>
+                                )
                             ) : (
-                                <Link href="/sign-in"><Button>Sign In</Button></Link>
+                                <Link href="/sign-in">
+                                    <Button>Sign In</Button>
+                                </Link>
                             )}
                         </div>
                     </div>

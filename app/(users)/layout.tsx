@@ -1,21 +1,30 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { ReactNode } from "react";
-import Topbar from "@/components/layout/Topbar";
-import Sidebar from "@/components/layout/Sidebar";
+import ProfileSidebar from "@/components/layout/ProfileSideBar";
+import { db } from "@/lib/db";
 
-const Instructorlayout = async ({ children }: { children: React.ReactNode }) => {
-  const { userId } = await auth(); 
-
-  if (!userId) {
-    redirect("/sign-in"); 
-  }
+const Instructorlayout  = async ({children, params,}: {children: React.ReactNode; params: { profileId: string };}) => {
+    const { userId } = await auth();
+  
+    if (!userId) {
+      return redirect("/sign-in");
+    }
+  
+    const profile = await db.profile.findUnique({
+      where: {
+        user_id: userId,
+      },
+    });
+  
+    if (!profile) {
+      return redirect("/");
+    }
 
   return (
-    <div className="h-full flex flex-col">
-    
+    <div className="min-h-screen flex flex-col">
       <div className="flex-1 flex h-full">
-        <Sidebar />
+        <ProfileSidebar profile={profile}/>
         <div className="flex-1">{children}</div>
       </div>
     </div>

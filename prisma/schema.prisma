@@ -49,7 +49,7 @@ model Profile {
   telegram          String?    @db.Text
   facebook          String?    @db.Text
   isMilitary        Boolean?    @default(false)
-  createdCourses    Course[]   
+  createdCourses    Course[]  
   enrolledCourses   Purchase[] 
 }
 

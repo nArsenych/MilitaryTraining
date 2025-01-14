@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
@@ -6,17 +5,17 @@ import { db } from "@/lib/db";
 import ReadText from "@/components/custom/ReadTwxt";
 
 const CourseOverview = async ({ params }: { params: { profileId: string } }) => {
-  const { userId } = await auth();
+    const { userId } = await auth();
     
-      if (!userId) {
-        return redirect("/sign-in");
-      }
+    if (!userId) {
+      return redirect("/sign-in");
+    }
 
-  const profile = await db.profile.findUnique({
-    where: {
-      user_id: userId
-    },
-  });
+const profile = await db.profile.findUnique({
+  where: {
+    user_id: userId
+  },
+});
 
   if (!profile) {
     return redirect("/");
@@ -55,7 +54,7 @@ const CourseOverview = async ({ params }: { params: { profileId: string } }) => 
 
       <div className="flex gap-2">
         <p className="text-[#ebac66] font-bold">Вік:</p>
-        <p>${profile.age}</p>
+        <p>{profile.age}</p>
       </div>
 
       <div className="flex gap-2">

@@ -29,7 +29,6 @@ const CourseCard = async ({ course }: { course: Course }) => {
     return `${firstName} ${lastName}`;
   };
 
-  const fullName = formatFullName(organization.firstName, organization.lastName);
 
   return (
     <Link

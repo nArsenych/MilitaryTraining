@@ -26,12 +26,6 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
       >
         Інформація про курс
       </Link>
-      <Link
-        href={`/courses/${course.id}/overview`}
-        className={`p-3 rounded-lg hover:bg-[#ebac66] mt-4`}
-      >
-        Організація
-      </Link>
      
     </div>
   );

@@ -6,7 +6,7 @@ const HomeLayout = async ({ children }: { children: ReactNode }) => {
   const isOrganization = await getOrganizationStatus();
     return (
       <div className="flex flex-col">
-        <Topbar isOrganization={isOrganization}/>
+        <Topbar />
         <main className="min-h-screen bg-[#302E2B] pb-[14vh]">{children}</main>
       </div>
     );

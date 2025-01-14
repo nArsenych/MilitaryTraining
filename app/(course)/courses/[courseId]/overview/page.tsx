@@ -1,9 +1,8 @@
-
 import Image from "next/image";
 import { redirect } from "next/navigation";
-
 import { db } from "@/lib/db";
 import ReadText from "@/components/custom/ReadTwxt";
+import Link from "next/link";
 
 const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
   const course = await db.course.findUnique({
@@ -17,12 +16,18 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
     return redirect("/");
   }
 
+  const profile = await db.profile.findFirst({
+    where: {
+      user_id: course.organizationId
+    }
+  });
+
   const response = await fetch(`https://api.clerk.dev/v1/users/${course.organizationId}`, {
     headers: {
       Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
     }
   });
-  
+
   const instructor = await response.json();
 
   const formatFullName = (firstName?: string | null, lastName?: string | null): string => {
@@ -64,13 +69,18 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
           height={30}
           className="rounded-full"
         />
-        <p className="text-[#ebac66] font-bold">Організація:</p>
-        <p>{formatFullName(instructor.first_name, instructor.last_name)}</p>
+        <Link
+          href={profile ? `/profile/${profile.id}/overview` : "#"}
+          className="border rounded-lg cursor-pointer p-2"
+        >
+          <p className="text-[#ebac66] font-bold">Організація:</p>
+          <p>{profile?.full_name || "Невідома організація"}</p>
+        </Link>
       </div>
 
       <div className="flex gap-2">
         <p className="text-[#ebac66] font-bold">Ціна:</p>
-        <p>${course.price}</p>
+        <p>{course.price}</p>
       </div>
 
       <div className="flex gap-2">

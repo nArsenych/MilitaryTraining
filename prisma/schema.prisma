@@ -66,6 +66,7 @@ model Purchase {
   student        Profile  @relation("StudentEnrollments", fields: [customerId], references: [id])
   organization   Profile  @relation("OrganizationEnrollments", fields: [organizationId], references: [id])
   organizationId String
+  confirmed Boolean @default(false)
 
   @@index([courseId])
   @@index([customerId])

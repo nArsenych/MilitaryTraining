@@ -4,6 +4,33 @@ import { redirect } from "next/navigation";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { sendConfirmationEmail } from "@/app/actions/email";
+import { revalidatePath } from "next/cache";
+
+// Модифікуємо серверний action для підтвердження
+async function confirmEnrollment(formData: FormData) {
+  'use server';
+  
+  try {
+    const purchaseId = formData.get('purchaseId') as string;
+    
+    // Відправляємо email
+    await sendConfirmationEmail(formData);
+    
+    // Оновлюємо статус в базі даних
+    await db.purchase.update({
+      where: { id: purchaseId },
+      data: { confirmed: true }
+    });
+    
+    // Перевалідовуємо сторінку для оновлення UI
+    revalidatePath('/instructor/perfomance');
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error confirming enrollment:', error);
+    return { success: false };
+  }
+}
 
 const CourseEnrollmentsPage: FC = async () => {
   const { userId } = await auth();
@@ -100,16 +127,25 @@ const CourseEnrollmentsPage: FC = async () => {
                             <p className="text-sm text-gray-600 mt-1">
                               Записався: {new Date(purchase.createdAt).toLocaleDateString('uk-UA')}
                             </p>
-                            <form action={sendConfirmationEmail}>
-                              <input type="hidden" name="purchaseId" value={purchase.id} />
+                            {purchase.confirmed ? (
                               <Button 
-                                type="submit"
-                                className="mt-2"
-                                variant="outline"
+                                className="mt-2 bg-green-100 text-green-800 hover:bg-green-100"
+                                disabled
                               >
-                                Підтвердити запис
+                                Запис підтверджено ✓
                               </Button>
-                            </form>
+                            ) : (
+                              <form action={confirmEnrollment}>
+                                <input type="hidden" name="purchaseId" value={purchase.id} />
+                                <Button 
+                                  type="submit"
+                                  className="mt-2"
+                                  variant="outline"
+                                >
+                                  Підтвердити запис
+                                </Button>
+                              </form>
+                            )}
                           </div>
                           <div className="text-right text-sm text-gray-600 space-y-1">
                             {purchase.student.phone_number && (

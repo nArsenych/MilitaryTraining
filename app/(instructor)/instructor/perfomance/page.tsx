@@ -5,24 +5,21 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { sendConfirmationEmail } from "@/app/actions/email";
 import { revalidatePath } from "next/cache";
+import Link from "next/link";
 
-// Модифікуємо серверний action для підтвердження
 async function confirmEnrollment(formData: FormData) {
   'use server';
   
   try {
     const purchaseId = formData.get('purchaseId') as string;
     
-    // Відправляємо email
     await sendConfirmationEmail(formData);
     
-    // Оновлюємо статус в базі даних
     await db.purchase.update({
       where: { id: purchaseId },
       data: { confirmed: true }
     });
     
-    // Перевалідовуємо сторінку для оновлення UI
     revalidatePath('/instructor/perfomance');
     
     return { success: true };
@@ -109,16 +106,19 @@ const CourseEnrollmentsPage: FC = async () => {
                         key={purchase.id} 
                         className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition"
                       >
-                        <div className="flex justify-between items-start">
+                         <div className="flex justify-between items-start">
                           <div>
-                            <p className="font-medium">
+                            <Link 
+                              href={`/profile/${purchase.student.user_id}/overview`}
+                              className="inline-block font-medium hover:text-blue-600 transition"
+                            >
                               {purchase.student.full_name || 'Без імені'}
                               {purchase.student.isMilitary && (
                                 <span className="ml-2 text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
                                   Військовий
                                 </span>
                               )}
-                            </p>
+                            </Link>
                             {purchase.student.age && (
                               <p className="text-sm text-gray-600">
                                 Вік: {purchase.student.age} років

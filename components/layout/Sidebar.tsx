@@ -21,7 +21,7 @@ const Sidebar = () => {
         {
             icon: BarChart4,
             label: "Активність",
-            path: "/instructor/performance",
+            path: "/instructor/perfomance",
         },
     ];
 

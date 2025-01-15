@@ -1,0 +1,144 @@
+import { db } from "@/lib/db";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { FC } from "react";
+import { Button } from "@/components/ui/button";
+import { sendConfirmationEmail } from "@/app/actions/email";
+
+const CourseEnrollmentsPage: FC = async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return redirect("/");
+  }
+
+  const organizationProfile = await db.profile.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (!organizationProfile || !organizationProfile.isOrganization) {
+    return redirect("/");
+  }
+
+  const coursesWithEnrollments = await db.course.findMany({
+    where: {
+      organizationId: organizationProfile.user_id,
+    },
+    include: {
+      purchases: {
+        include: {
+          student: {
+            select: {
+              id: true,
+              user_id: true,
+              full_name: true,
+              phone_number: true,
+              telegram: true,
+              instagram: true,
+              facebook: true,
+              age: true,
+              isMilitary: true,
+            },
+          },
+        },
+      },
+      category: true,
+      city: true,
+      level: true,
+    },
+    orderBy: {
+      createdAt: 'desc'
+    }
+  });
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Мої курси та учасники</h2>
+      {coursesWithEnrollments.length === 0 ? (
+        <p className="text-gray-500">У вас ще немає створених курсів.</p>
+      ) : (
+        <div className="grid gap-6">
+          {coursesWithEnrollments.map((course) => (
+            <div key={course.id} className="border rounded-lg p-6 bg-white shadow-sm">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-xl font-semibold">{course.title}</h3>
+                <div className="text-sm text-gray-500 space-y-1">
+                  <p>Категорія: {course.category.name}</p>
+                  {course.city && <p>Місто: {course.city.name}</p>}
+                  {course.level && <p>Рівень: {course.level.name}</p>}
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <h4 className="text-lg font-medium mb-3">
+                  Записані учасники ({course.purchases.length}):
+                </h4>
+                {course.purchases.length > 0 ? (
+                  <div className="space-y-3">
+                    {course.purchases.map((purchase) => (
+                      <div 
+                        key={purchase.id} 
+                        className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition"
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="font-medium">
+                              {purchase.student.full_name || 'Без імені'}
+                              {purchase.student.isMilitary && (
+                                <span className="ml-2 text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
+                                  Військовий
+                                </span>
+                              )}
+                            </p>
+                            {purchase.student.age && (
+                              <p className="text-sm text-gray-600">
+                                Вік: {purchase.student.age} років
+                              </p>
+                            )}
+                            <p className="text-sm text-gray-600 mt-1">
+                              Записався: {new Date(purchase.createdAt).toLocaleDateString('uk-UA')}
+                            </p>
+                            <form action={sendConfirmationEmail}>
+                              <input type="hidden" name="purchaseId" value={purchase.id} />
+                              <Button 
+                                type="submit"
+                                className="mt-2"
+                                variant="outline"
+                              >
+                                Підтвердити запис
+                              </Button>
+                            </form>
+                          </div>
+                          <div className="text-right text-sm text-gray-600 space-y-1">
+                            {purchase.student.phone_number && (
+                              <p>Телефон: {purchase.student.phone_number}</p>
+                            )}
+                            {purchase.student.telegram && (
+                              <p>Telegram: {purchase.student.telegram}</p>
+                            )}
+                            {purchase.student.instagram && (
+                              <p>Instagram: {purchase.student.instagram}</p>
+                            )}
+                            {purchase.student.facebook && (
+                              <p>Facebook: {purchase.student.facebook}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">На цей курс ще ніхто не записався.</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CourseEnrollmentsPage;

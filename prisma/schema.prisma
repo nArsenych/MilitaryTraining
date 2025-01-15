@@ -29,7 +29,7 @@ model Course {
   category       Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   city           City?     @relation(fields: [cityId], references: [id], onDelete: Cascade)
   level          Level?    @relation(fields: [levelId], references: [id], onDelete: Cascade)
-  organization   Profile?  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Profile   @relation("OrganizationCourses", fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([categoryId])
@@ -48,23 +48,28 @@ model Profile {
   instagram         String?    @db.Text
   telegram          String?    @db.Text
   facebook          String?    @db.Text
-  isMilitary        Boolean?    @default(false)
-  createdCourses    Course[]  
-  enrolledCourses   Purchase[] 
+  isMilitary        Boolean?   @default(false)
+
+  createdCourses    Course[]   @relation("OrganizationCourses")
+  enrolledCourses   Purchase[] @relation("StudentEnrollments")
+  courseEnrollments Purchase[] @relation("OrganizationEnrollments")
 }
 
 model Purchase {
-  id         String   @id @default(uuid())
-  customerId String
-  courseId   String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             String   @id @default(uuid())
+  customerId     String
+  courseId       String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  customer   Profile  @relation(fields: [customerId], references: [id])
+  course         Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student        Profile  @relation("StudentEnrollments", fields: [customerId], references: [id])
+  organization   Profile  @relation("OrganizationEnrollments", fields: [organizationId], references: [id])
+  organizationId String
 
   @@index([courseId])
   @@index([customerId])
+  @@index([organizationId])
   @@unique([customerId, courseId])
 }
 

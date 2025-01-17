@@ -85,10 +85,10 @@ const CourseEnrollmentsPage: FC = async () => {
       ) : (
         <div className="grid gap-6">
           {coursesWithEnrollments.map((course) => (
-            <div key={course.id} className="border rounded-lg p-6 bg-white shadow-sm">
+            <div key={course.id} className="border rounded-lg p-6 bg-[#F1CDA6] shadow-sm">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-semibold">{course.title}</h3>
-                <div className="text-sm text-gray-500 space-y-1">
+                <div className="text-sm text-gray-500 space-y-1 bg-[#F1CDA6]">
                   <p>Категорія: {course.category.name}</p>
                   {course.city && <p>Місто: {course.city.name}</p>}
                   {course.level && <p>Рівень: {course.level.name}</p>}
@@ -109,7 +109,7 @@ const CourseEnrollmentsPage: FC = async () => {
                          <div className="flex justify-between items-start">
                           <div>
                             <Link 
-                              href={`/profile/${purchase.student.user_id}/overview`}
+                              href={`/profile/${purchase.student.id}/overview`}
                               className="inline-block font-medium hover:text-blue-600 transition"
                             >
                               {purchase.student.full_name || 'Без імені'}

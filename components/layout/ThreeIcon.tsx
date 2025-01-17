@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Library, Users, MapPin } from 'lucide-react';
+import { Library, Users, MapPin, Boxes } from 'lucide-react';
 
 const ThreeIcon = () => {
   const pathname = usePathname();
 
   const ThreeIconRoutes = [
+    {
+      icon: <Boxes size={100} color="#ebac66" strokeWidth={1.3}/>,
+      label: "Всі курси",
+      path: "/all"
+    },
     {
       icon: <Library size={100} color="#ebac66" strokeWidth={1.5}/>,
       label: "Категорії",

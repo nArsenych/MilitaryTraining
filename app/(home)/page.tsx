@@ -2,7 +2,6 @@
 import CalendarCourses from "@/components/courses/CalendarCourse";
 import ThreeIcon from "@/components/layout/ThreeIcon";
 import { db } from "@/lib/db";
-import Link from "next/link";
 
 async function getOrganizationName(organizationId: string) {
   try {

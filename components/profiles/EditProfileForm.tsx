@@ -4,6 +4,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Profile } from "@prisma/client";
+import { AxiosError } from "axios";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -18,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import RichEditor from "@/components/custom/RichEditor";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -62,18 +63,23 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
             await axios.patch(`/api/profiles/${profile.id}`, values);
             toast.success("Profile Updated");
             router.refresh();
-        } catch (err: any) {
-            if (err.response) {
-                console.error("Response error:", {
-                    status: err.response.status,
-                    data: err.response.data,
-                });
-                toast.error(`Error ${err.response.status}: ${err.response.data}`);
-            } else if (err.request) {
-                console.error("Request error:", err.request);
-                toast.error("No response received from server.");
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                if (error.response) {
+                    console.error("Response error:", {
+                        status: error.response.status,
+                        data: error.response.data,
+                    });
+                    toast.error(`Error ${error.response.status}: ${error.response.data}`);
+                } else if (error.request) {
+                    console.error("Request error:", error.request);
+                    toast.error("No response received from server.");
+                } else {
+                    console.error("Error setting up request:", error.message);
+                    toast.error("An error occurred while setting up the request.");
+                }
             } else {
-                console.error("Unexpected error:", err.message);
+                console.error("Unexpected error:", error);
                 toast.error("An unexpected error occurred.");
             }
         }
@@ -94,7 +100,7 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Ім'я<span className="text-red-500">*</span>
+                                    Ім&apos;я<span className="text-red-500">*</span>
                                 </FormLabel>
                                 <FormControl>
                                     <Input placeholder="" {...field} />

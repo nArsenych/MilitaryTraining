@@ -1,6 +1,5 @@
 "use client";
 
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -11,7 +10,6 @@ interface EnrollButtonProps {
 }
 
 export const EnrollButton = ({
-  courseId,
   className
 }: EnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);

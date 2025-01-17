@@ -5,7 +5,6 @@ import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { sendConfirmationEmail } from "@/app/actions/email";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
 
 async function confirmEnrollment(formData: FormData): Promise<void> {
   'use server';

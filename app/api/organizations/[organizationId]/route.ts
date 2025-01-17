@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: { organizationId: string } }
 ) {
   try {
-    const headersList = headers();
 
     const clerkResponse = await fetch(`https://api.clerk.dev/v1/users/${params.organizationId}`, {
       headers: {

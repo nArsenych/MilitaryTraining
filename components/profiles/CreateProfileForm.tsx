@@ -60,7 +60,7 @@ const CreateProfileForm = () => {
                         name="full_name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Ім'я</FormLabel>
+                                <FormLabel> Ім&apos;я</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Введіть своє повне ім'я"

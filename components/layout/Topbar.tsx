@@ -8,10 +8,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useProfile } from "@/hooks/UseProfile";
 
-interface TopbarProps {
-    isOrganization: boolean;
-}
-
 const Topbar = () => {
     const { profileId, isOrganization, isLoading } = useProfile();
     const { isSignedIn } = useAuth();

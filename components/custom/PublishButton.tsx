@@ -24,21 +24,24 @@ const PublishButton = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const onClick = async () => {
-    let url = `/api/courses/${courseId}`;
+    const url = `/api/courses/${courseId}`;
 
     try {
       setIsLoading(true);
-      isPublished
-        ? await axios.post(`${url}/unpublish`)
-        : await axios.post(`${url}/publish`);
+      
+      if (isPublished) {
+        await axios.post(`${url}/unpublish`);
+      } else {
+        await axios.post(`${url}/publish`);
+      }
 
       toast.success(`${page} ${isPublished ? "unpublished" : "published"}`);
       router.refresh();
-    } catch (err) {
+    } catch (error) {
       toast.error("Something went wrong!");
       console.log(
-        `Failed to ${isPublished ? "unpublish" : "publish"} ${page}`,
-        err
+        `Failed to ${isPublished ? "unpublish" : "publish"} ${page}:`,
+        error
       );
     } finally {
       setIsLoading(false);
@@ -51,7 +54,11 @@ const PublishButton = ({
       disabled={disabled || isLoading}
       onClick={onClick}
     >
-      {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isPublished ? "Unpublish" : "Publish"}
+      {isLoading ? (
+        <Loader2 className="h-4 w-4 animate-spin" />
+      ) : (
+        isPublished ? "Unpublish" : "Publish"
+      )}
     </Button>
   );
 };

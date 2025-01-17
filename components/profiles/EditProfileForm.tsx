@@ -28,6 +28,7 @@ import { Trash } from "lucide-react";
 import Delete from "@/components/custom/Delete";
 import PublishButton from "@/components/custom/PublishButton";
 import { Checkbox } from "@radix-ui/react-checkbox";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const formSchema = z.object({
     full_name: z.string().min(2, {
@@ -153,12 +154,31 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
                             control={form.control}
                             name="isMilitary"
                             render={({ field }) => (
-                                <FormItem className="flex flex-col">
-                                    <FormLabel>
-                                        Для кого розрахований курс
-                                    </FormLabel>
+                                <FormItem className="space-y-3">
+                                    <FormLabel>Ви Військовий?</FormLabel>
                                     <FormControl>
-                                        <Checkbox />
+                                        <RadioGroup
+                                            onValueChange={(value) => field.onChange(value === "true")}
+                                            defaultValue={field.value?.toString()}
+                                            className="flex flex-col space-y-1"
+                                        >
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="true" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Так
+                                                </FormLabel>
+                                            </FormItem>
+                                            <FormItem className="flex items-center space-x-3 space-y-0">
+                                                <FormControl>
+                                                    <RadioGroupItem value="false" />
+                                                </FormControl>
+                                                <FormLabel className="font-normal">
+                                                    Ні
+                                                </FormLabel>
+                                            </FormItem>
+                                        </RadioGroup>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -186,7 +206,6 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
                             </FormItem>
                         )}
                     />
-
 
                     <div className="flex flex-wrap gap-10">
                         <FormField
@@ -234,16 +253,15 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
                                 </FormItem>
                             )}
                         />
-                        
                     </div>
                     <div className="flex gap-5">
-                            <Link href="/instructor/courses">
-                                <Button variant="outline" type="button">
-                                    Скасувати
-                                </Button>
-                            </Link>
-                            <Button type="submit">Зберегти</Button>
-                        </div>
+                        <Link href="/instructor/courses">
+                            <Button variant="outline" type="button">
+                                Скасувати
+                            </Button>
+                        </Link>
+                        <Button type="submit">Зберегти</Button>
+                    </div>
                 </form>
             </Form>
         </>

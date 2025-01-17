@@ -7,25 +7,23 @@ import { sendConfirmationEmail } from "@/app/actions/email";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
-async function confirmEnrollment(formData: FormData) {
+async function confirmEnrollment(formData: FormData): Promise<void> {
   'use server';
-  
+
   try {
     const purchaseId = formData.get('purchaseId') as string;
-    
+
     await sendConfirmationEmail(formData);
-    
+
     await db.purchase.update({
       where: { id: purchaseId },
       data: { confirmed: true }
     });
-    
+
     revalidatePath('/instructor/perfomance');
-    
-    return { success: true };
   } catch (error) {
     console.error('Error confirming enrollment:', error);
-    return { success: false };
+    throw error; // This will be handled by Next.js error boundary
   }
 }
 
@@ -64,6 +62,7 @@ const CourseEnrollmentsPage: FC = async () => {
               facebook: true,
               age: true,
               isMilitary: true,
+              description: true,
             },
           },
         },
@@ -94,7 +93,7 @@ const CourseEnrollmentsPage: FC = async () => {
                   {course.level && <p>Рівень: {course.level.name}</p>}
                 </div>
               </div>
-              
+
               <div className="mt-4">
                 <h4 className="text-lg font-medium mb-3">
                   Записані учасники ({course.purchases.length}):
@@ -102,23 +101,18 @@ const CourseEnrollmentsPage: FC = async () => {
                 {course.purchases.length > 0 ? (
                   <div className="space-y-3">
                     {course.purchases.map((purchase) => (
-                      <div 
-                        key={purchase.id} 
+                      <div
+                        key={purchase.id}
                         className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition"
                       >
-                         <div className="flex justify-between items-start">
-                          <div>
-                            <Link 
-                              href={`/profile/${purchase.student.id}/overview`}
-                              className="inline-block font-medium hover:text-blue-600 transition"
-                            >
+                        <div className="flex justify-between items-start">
+                          <div className="w-1/3">
                               {purchase.student.full_name || 'Без імені'}
                               {purchase.student.isMilitary && (
                                 <span className="ml-2 text-sm bg-blue-100 text-blue-800 px-2 py-1 rounded">
                                   Військовий
                                 </span>
                               )}
-                            </Link>
                             {purchase.student.age && (
                               <p className="text-sm text-gray-600">
                                 Вік: {purchase.student.age} років
@@ -128,7 +122,7 @@ const CourseEnrollmentsPage: FC = async () => {
                               Записався: {new Date(purchase.createdAt).toLocaleDateString('uk-UA')}
                             </p>
                             {purchase.confirmed ? (
-                              <Button 
+                              <Button
                                 className="mt-2 bg-green-100 text-green-800 hover:bg-green-100"
                                 disabled
                               >
@@ -137,7 +131,7 @@ const CourseEnrollmentsPage: FC = async () => {
                             ) : (
                               <form action={confirmEnrollment}>
                                 <input type="hidden" name="purchaseId" value={purchase.id} />
-                                <Button 
+                                <Button
                                   type="submit"
                                   className="mt-2"
                                   variant="outline"
@@ -147,7 +141,18 @@ const CourseEnrollmentsPage: FC = async () => {
                               </form>
                             )}
                           </div>
-                          <div className="text-right text-sm text-gray-600 space-y-1">
+
+                          <div className="w-1/3 px-4 text-sm text-gray-600">
+                            {purchase.student.description ? (
+                              <div className="prose prose-sm max-w-none" 
+                                   dangerouslySetInnerHTML={{ __html: purchase.student.description }}>
+                              </div>
+                            ) : (
+                              <p className="text-gray-400 italic">Опис відсутній</p>
+                            )}
+                          </div>
+
+                          <div className="w-1/3 text-right text-sm text-gray-600 space-y-1">
                             {purchase.student.phone_number && (
                               <p>Телефон: {purchase.student.phone_number}</p>
                             )}

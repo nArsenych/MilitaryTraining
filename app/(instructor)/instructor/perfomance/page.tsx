@@ -23,7 +23,7 @@ async function confirmEnrollment(formData: FormData): Promise<void> {
     revalidatePath('/instructor/perfomance');
   } catch (error) {
     console.error('Error confirming enrollment:', error);
-    throw error; // This will be handled by Next.js error boundary
+    throw error; 
   }
 }
 

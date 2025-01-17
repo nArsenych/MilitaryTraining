@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { UserButton } from "@clerk/nextjs";
 import getCoursesByCategory from "../../actions/getCoursesCategories";
 import Categories from "@/components/custom/Categories";
 import CourseCard from "@/components/courses/CourseCard";

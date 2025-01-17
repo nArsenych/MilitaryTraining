@@ -3,13 +3,12 @@
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Course, Profile } from "@prisma/client";
+import { Profile } from "@prisma/client";
 
 import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -17,17 +16,10 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import RichEditor from "@/components/custom/RichEditor";
-import { ComboBox } from "@/components/custom/ComboBox";
-import FileUpload from "@/components/custom/FileUpload";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter, usePathname } from "next/navigation";
 import toast from "react-hot-toast";
-import { DatePicker } from "@/components/ui/date-picker";
-import { Trash } from "lucide-react";
-import Delete from "@/components/custom/Delete";
-import PublishButton from "@/components/custom/PublishButton";
-import { Checkbox } from "@radix-ui/react-checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const formSchema = z.object({
@@ -50,7 +42,6 @@ interface EditProfileFormProps {
 
 const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
     const router = useRouter();
-    const pathname = usePathname();
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),

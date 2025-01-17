@@ -1,8 +1,8 @@
 import { db } from "@/lib/db"
-import { Course } from "@prisma/client"
+import { Course, Prisma } from "@prisma/client"
 
 const getCoursesByOrganization = async (organizationId: string | null): Promise<Course[]> => {
-  const whereClause: any = {
+  const whereClause: Prisma.CourseWhereInput = {
     isPublished: true,
     ...(organizationId ? { organizationId } : {}),
   }

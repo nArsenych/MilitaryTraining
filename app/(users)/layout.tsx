@@ -1,10 +1,9 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
 import ProfileSidebar from "@/components/layout/ProfileSideBar";
 import { db } from "@/lib/db";
 
-const Instructorlayout  = async ({children, params,}: {children: React.ReactNode; params: { profileId: string };}) => {
+const Instructorlayout  = async ({children,}: {children: React.ReactNode; params: { profileId: string };}) => {
     const { userId } = await auth();
   
     if (!userId) {

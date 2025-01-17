@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -97,7 +96,6 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
                             )}
                         />
                     </div>
-
 
                     <Button type="submit">Submit</Button>
                 </form>

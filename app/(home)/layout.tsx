@@ -1,9 +1,7 @@
 import { ReactNode } from "react"
 import Topbar from "@/components/layout/Topbar"
-import { getOrganizationStatus } from "@/components/NavbarRoutes";
 
 const HomeLayout = async ({ children }: { children: ReactNode }) => {
-  const isOrganization = await getOrganizationStatus();
     return (
       <div className="flex flex-col">
         <Topbar />

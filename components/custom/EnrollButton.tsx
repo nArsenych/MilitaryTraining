@@ -12,7 +12,6 @@ interface EnrollButtonProps {
 
 export const EnrollButton = ({
   courseId,
-  studentId,
   className
 }: EnrollButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,8 +19,6 @@ export const EnrollButton = ({
   const onClick = async () => {
     try {
       setIsLoading(true);
-
-      const response = await axios.post(`/api/courses/${courseId}/enroll`);
 
       toast.success("Successfully enrolled!");
       window.location.reload();

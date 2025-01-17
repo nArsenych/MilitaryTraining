@@ -2,9 +2,9 @@
 
 import Link from "next/link"
 import { Search } from "lucide-react";
-import { useAuth, UserButton } from "@clerk/nextjs";
+import { useAuth } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useProfile } from "@/hooks/UseProfile";
 

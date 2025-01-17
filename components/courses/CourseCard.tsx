@@ -1,5 +1,4 @@
 import { db } from "@/lib/db";
-import { clerkClient } from "@clerk/nextjs/server"
 import { Course } from "@prisma/client"
 import { Feather } from "lucide-react";
 import Image from "next/image";

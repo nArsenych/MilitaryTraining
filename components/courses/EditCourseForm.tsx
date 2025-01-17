@@ -4,12 +4,12 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Course } from "@prisma/client";
+import { AxiosError } from 'axios';
 
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -21,10 +21,9 @@ import { ComboBox } from "@/components/custom/ComboBox";
 import FileUpload from "@/components/custom/FileUpload";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { DatePicker } from "@/components/ui/date-picker";
-import { Trash } from "lucide-react";
 import Delete from "@/components/custom/Delete";
 import PublishButton from "@/components/custom/PublishButton";
 
@@ -69,7 +68,6 @@ interface EditCourseFormProps {
 
 const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: EditCourseFormProps) => {
   const router = useRouter();
-  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -93,19 +91,23 @@ const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: Edi
       await axios.patch(`/api/courses/${course.id}`, values);
       toast.success("Course Updated");
       router.refresh();
-    } catch (err: any) {
-      // Перевірка на помилку Axios
-      if (err.response) {
-        console.error("Response error:", {
-          status: err.response.status,
-          data: err.response.data,
-        });
-        toast.error(`Error ${err.response.status}: ${err.response.data}`);
-      } else if (err.request) {
-        console.error("Request error:", err.request);
-        toast.error("No response received from server.");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.error("Response error:", {
+            status: error.response.status,
+            data: error.response.data,
+          });
+          toast.error(`Error ${error.response.status}: ${error.response.data}`);
+        } else if (error.request) {
+          console.error("Request error:", error.request);
+          toast.error("No response received from server.");
+        } else {
+          console.error("Error setting up request:", error.message);
+          toast.error("An error occurred while setting up the request.");
+        }
       } else {
-        console.error("Unexpected error:", err.message);
+        console.error("Unexpected error:", error);
         toast.error("An unexpected error occurred.");
       }
     }

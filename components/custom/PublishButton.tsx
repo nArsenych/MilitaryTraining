@@ -10,7 +10,6 @@ import toast from "react-hot-toast";
 interface PublishButtonProps {
   disabled: boolean;
   courseId: string;
- // sectionId?: string;
   isPublished: boolean;
   page: string;
 }
@@ -18,7 +17,6 @@ interface PublishButtonProps {
 const PublishButton = ({
   disabled,
   courseId,
- // sectionId,
   isPublished,
   page,
 }: PublishButtonProps) => {
@@ -27,9 +25,6 @@ const PublishButton = ({
 
   const onClick = async () => {
     let url = `/api/courses/${courseId}`;
-    // if (page === "Section") {
-    //   url += `/sections/${sectionId}`;
-    // }
 
     try {
       setIsLoading(true);

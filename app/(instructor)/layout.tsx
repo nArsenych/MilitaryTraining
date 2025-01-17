@@ -1,7 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { ReactNode } from "react";
-import Topbar from "@/components/layout/Topbar";
 import Sidebar from "@/components/layout/Sidebar";
 
 const Instructorlayout = async ({ children }: { children: React.ReactNode }) => {

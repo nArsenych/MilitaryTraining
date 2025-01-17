@@ -2,7 +2,6 @@
 
 import { UserButton } from "@clerk/nextjs";
 import { Profile } from "@prisma/client";
-import { UserPen, User, Home } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -16,7 +15,6 @@ const ProfileSidebar = ({ profile }: CourseSideBarProps) => {
     const pathname = usePathname();
     
     useEffect(() => {
-        // Check if we're at the root path of this component
         if (pathname === '/') {
             router.push('/users/profiles');
         }

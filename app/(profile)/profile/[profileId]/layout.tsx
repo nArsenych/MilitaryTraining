@@ -1,10 +1,8 @@
-import CourseSideBar from "@/components/layout/CourseSideBar";
-import Topbar from "@/components/layout/Topbar";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
-const ProfileDetailsLayout = async ({children, params,}: {children: React.ReactNode; params: { Id: string };}) => {
+const ProfileDetailsLayout = async ({children,}: {children: React.ReactNode; params: { Id: string };}) => {
   const { userId } = await auth();
   
   if (!userId) {

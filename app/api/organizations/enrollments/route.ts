@@ -1,10 +1,9 @@
-// api/organization/enrollments/route.ts
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 export async function GET(
-  req: Request,
+
 ) {
   try {
     const { userId } = await auth();
@@ -13,7 +12,6 @@ export async function GET(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get organization profile
     const organizationProfile = await db.profile.findUnique({
       where: {
         user_id: userId,
@@ -24,7 +22,6 @@ export async function GET(
       return new NextResponse("Not authorized as organization", { status: 403 });
     }
 
-    // Get all courses with enrollments for the organization
     const coursesWithEnrollments = await db.course.findMany({
       where: {
         organizationId: organizationProfile.id,

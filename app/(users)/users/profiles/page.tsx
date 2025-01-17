@@ -5,7 +5,7 @@ import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import ReadText from "@/components/custom/ReadTwxt";
 
-const CourseOverview = async ({ params }: { params: { profileId: string } }) => {
+const CourseOverview = async ({ }: { params: { profileId: string } }) => {
   const { userId } = await auth();
     
       if (!userId) {

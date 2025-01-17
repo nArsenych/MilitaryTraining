@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { Course, Profile } from "@prisma/client";
+import { Course } from "@prisma/client";
 import Link from "next/link";
 import { EnrollButton } from "@/components/custom/EnrollButton";
 
@@ -9,7 +9,6 @@ interface CourseSideBarProps {
 }
 
 const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
-  // Перевіряємо чи користувач вже записаний на курс
   const userProfile = await db.profile.findUnique({
     where: {
       user_id: studentId,
@@ -20,7 +19,6 @@ const CourseSideBar = async ({ course, studentId }: CourseSideBarProps) => {
     return null;
   }
 
-  // Перевіряємо чи є вже запис на цей курс
   const existingPurchase = await db.purchase.findUnique({
     where: {
       customerId_courseId: {

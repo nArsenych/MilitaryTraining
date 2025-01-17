@@ -7,10 +7,9 @@ import { Home } from "lucide-react";
 
 interface CitiesProps {
   cities: City[];
-  selectedCity: string | null;
 }
 
-const Cities = ({ cities, selectedCity }: CitiesProps) => {
+const Cities = ({ cities }: CitiesProps) => {
   const router = useRouter();
   const pathname = usePathname();
 

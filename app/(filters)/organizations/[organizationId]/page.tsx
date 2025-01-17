@@ -1,15 +1,7 @@
-// Спочатку виправимо інтерфейс у компоненті Organization:
-interface OrganizationsProps {
-    courses: Course[];  // замість organization
-    selectedOrganization: string | null;
-  }
-  
-  // Тепер виправимо основний компонент CoursesByOrg:
-  import { db } from "@/lib/db";
-  import CourseCard from "@/components/courses/CourseCard";
-  import getCoursesByOrganization from "@/app/actions/getCoursesOrganizations";
-  import Organization from "@/components/custom/Organizations";
-import { Course } from "@prisma/client";
+
+import CourseCard from "@/components/courses/CourseCard";
+import getCoursesByOrganization from "@/app/actions/getCoursesOrganizations";
+import Organization from "@/components/custom/Organizations";
   
   const CoursesByOrg = async ({
     params,

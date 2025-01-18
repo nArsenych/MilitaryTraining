@@ -1,11 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 
+// Правильне оголошення глобальних типів
 declare global {
+  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 
-export const db = global.prisma || new PrismaClient();
+export const db = globalThis.prisma || new PrismaClient();
 
 if (process.env.NODE_ENV !== "production") {
-  global.prisma = db;
+  globalThis.prisma = db;
 }

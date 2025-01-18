@@ -28,14 +28,14 @@ import PublishButton from "@/components/custom/PublishButton";
 
 const formSchema = z.object({
   title: z.string().min(2, {
-    message: "Title must be at least 2 characters long",
+    message: "Назва повинна містити мінімум 2 символи",
   }),
   description: z.string().optional(),
   categoryId: z.string().min(1, {
-    message: "Category is required",
+    message: "Категорія обов'язкова",
   }),
   levelId: z.string().min(1, {
-    message: "Level is required",
+    message: "Рівень обов'язковий",
   }),
   imageUrl: z.string().optional(),
   price: z.coerce.number().optional(),
@@ -44,7 +44,7 @@ const formSchema = z.object({
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
   cityId: z.string().min(1, {
-    message: "City is required",
+    message: "Місто обов'язкове",
   }),
 })
 
@@ -88,22 +88,11 @@ const EditCourseForm = ({ course, categories, levels, cities, isCompleted }: Edi
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.patch(`/api/courses/${course.id}`, values);
-      toast.success("Course Updated");
+      toast.success("Зміни збережено");
       router.refresh();
-    } catch (err: any) {
-      if (err.response) {
-        console.error("Response error:", {
-          status: err.response.status,
-          data: err.response.data,
-        });
-        toast.error(`Error ${err.response.status}: ${err.response.data}`);
-      } else if (err.request) {
-        console.error("Request error:", err.request);
-        toast.error("No response received from server.");
-      } else {
-        console.error("Unexpected error:", err.message);
-        toast.error("An unexpected error occurred.");
-      }
+    } catch (err) {
+      console.log("Failed to update the course", err);
+      toast.error("Something went wrong!");
     }
   };
 

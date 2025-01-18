@@ -21,10 +21,10 @@ import toast from "react-hot-toast";
 
 const formSchema = z.object({
     title: z.string().min(2, {
-        message: "Title is required and minimum 2 characters",
+        message: "Назва обов'язкова та повинна складатися не менше ніж з 2 символів",
     }),
     categoryId: z.string().min(1, {
-        message: "Category is required",
+        message: "Категорія обов'язкова",
     }),
 })
 
@@ -49,7 +49,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
         try {
             const response = await axios.post("/api/courses", values);
             router.push(`/instructor/courses/${response.data.id}/basic`);
-            toast.success("New Course Created");
+            toast.success("Новий курс створено");
         } catch (err) {
             console.log("Failed to create new course", err);
             toast.error("Something went wrong!");
@@ -59,7 +59,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
     return (
         <div className="p-10">
             <h1 className="text-xl font-bold">
-                Let give some basics for your course
+                Заповніть дані про курс
             </h1>
 
             <Form {...form}>
@@ -69,7 +69,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
                         name="title"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Title</FormLabel>
+                                <FormLabel>Назва</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Write the name of your course"
@@ -87,7 +87,7 @@ const CreateCourseForm = ({ categories }: CreateCourseFormProps) => {
                             name="categoryId"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Category</FormLabel>
+                                    <FormLabel>Категорія</FormLabel>
                                     <FormControl>
                                         <ComboBox options={categories} {...field} />
                                     </FormControl>

@@ -4,27 +4,14 @@ import ThreeIcon from "@/components/layout/ThreeIcon";
 import { db } from "@/lib/db";
 
 async function getOrganizationName(organizationId: string) {
-  try {
-    const response = await fetch(`https://api.clerk.dev/v1/users/${organizationId}`, {
-      headers: {
-        Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`
-      }
-    });
-    
-    const instructor = await response.json();
-    return formatFullName(instructor.first_name, instructor.last_name);
-  } catch (error) {
-    console.error("Error fetching organization name:", error);
-    return "Unknown Organization";
-  }
+  const profile = await db.profile.findUnique({
+    where: {
+      user_id: organizationId,
+    },
+  });
+  
+  return profile?.full_name || "Невідома організація";
 }
-
-const formatFullName = (firstName?: string | null, lastName?: string | null): string => {
-  if (!firstName && !lastName) return "Unknown User";
-  if (!firstName) return lastName || "Unknown User";
-  if (!lastName) return firstName;
-  return `${firstName} ${lastName}`;
-};
 
 export default async function Home() {
   const courses = await db.course.findMany({

@@ -20,7 +20,11 @@ const CourseCard = async ({ course }: { course: Course }) => {
       },
     });
   }
-  
+  const profile = await db.profile.findUnique({
+    where: {
+      user_id: course.organizationId,
+    },
+  });
   const formatFullName = (firstName?: string | null, lastName?: string | null): string => {
     if (!firstName && !lastName) return "Unknown User";
     if (!firstName) return lastName || "Unknown User";
@@ -54,7 +58,7 @@ const CourseCard = async ({ course }: { course: Course }) => {
                 className="rounded-full"
               />
               <p className="text-black">
-                {formatFullName(organization.first_name, organization.last_name)}
+                {profile?.full_name}
               </p>
             </div>
           )}

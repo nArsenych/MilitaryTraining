@@ -61,28 +61,12 @@ const EditProfileForm = ({ profile, isOrganization }: EditProfileFormProps) => {
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         try {
             await axios.patch(`/api/profiles/${profile.id}`, values);
-            toast.success("Profile Updated");
+            toast.success("Зміни збережено");
             router.refresh();
-        } catch (error) {
-            if (error instanceof AxiosError) {
-                if (error.response) {
-                    console.error("Response error:", {
-                        status: error.response.status,
-                        data: error.response.data,
-                    });
-                    toast.error(`Error ${error.response.status}: ${error.response.data}`);
-                } else if (error.request) {
-                    console.error("Request error:", error.request);
-                    toast.error("No response received from server.");
-                } else {
-                    console.error("Error setting up request:", error.message);
-                    toast.error("An error occurred while setting up the request.");
-                }
-            } else {
-                console.error("Unexpected error:", error);
-                toast.error("An unexpected error occurred.");
-            }
-        }
+        } catch (err) {
+            console.log("Failed to update the course", err);
+            toast.error("Something went wrong!");
+          }
     };
 
     return (

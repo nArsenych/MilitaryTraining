@@ -40,9 +40,9 @@ const CreateProfileForm = () => {
         try {
             const response = await axios.post("/api/profiles", values);
             router.push(`/users/profiles/${response.data.id}`);
-            toast.success("New Course Created");
+            toast.success("Новий профіль створено");
         } catch (err) {
-            console.log("Failed to create new course", err);
+            console.log("Failed to create new profile", err);
             toast.error("Something went wrong!");
         }
     };

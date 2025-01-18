@@ -10,7 +10,7 @@ export async function getOrganizationStatus() {
 
   const profile = await db.profile.findUnique({
     where: {
-      id: userId
+      user_id: userId
     },
     select: {
       isOrganization: true

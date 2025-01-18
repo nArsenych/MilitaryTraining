@@ -14,7 +14,6 @@ export async function POST(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    // Get user profile
     const userProfile = await db.profile.findUnique({
       where: {
         user_id: userId,
@@ -25,12 +24,10 @@ export async function POST(
       return new NextResponse("Profile not found", { status: 404 });
     }
 
-    // Check if user is NOT an organization
     if (userProfile.isOrganization) {
       return new NextResponse("Organizations cannot enroll in courses", { status: 403 });
     }
 
-    // Get course with organization info
     const course = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -45,7 +42,6 @@ export async function POST(
       return new NextResponse("Course not found", { status: 404 });
     }
 
-    // Check if purchase already exists
     const existingPurchase = await db.purchase.findUnique({
       where: {
         customerId_courseId: {
@@ -59,12 +55,11 @@ export async function POST(
       return new NextResponse("Already enrolled", { status: 400 });
     }
 
-    // Create purchase record
     const purchase = await db.purchase.create({
       data: {
         courseId: course.id,
         customerId: userProfile.id,
-        organizationId: course.organizationId, // Обов'язково додаємо organizationId
+        organizationId: course.organizationId, 
       },
     });
 

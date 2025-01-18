@@ -16,9 +16,9 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
     return redirect("/");
   }
 
-  const profile = await db.profile.findFirst({
+  const userProfile = await db.profile.findUnique({
     where: {
-      user_id: course.organizationId
+      user_id: course.organizationId,
     }
   });
 
@@ -69,13 +69,15 @@ const CourseOverview = async ({ params }: { params: { courseId: string } }) => {
           height={30}
           className="rounded-full"
         />
-        <Link
-          href={profile ? `/profile/${profile.id}/overview` : "#"}
-          className="border rounded-lg cursor-pointer p-2"
-        >
-          <p className="text-[#ebac66] font-bold">Організація:</p>
-          <p>{profile?.full_name || "Невідома організація"}</p>
-        </Link>
+        {userProfile && (
+          <Link
+            href={`/profile/${userProfile.id}/overview`}
+            className="border rounded-lg cursor-pointer p-2"
+          >
+            <p className="text-[#ebac66] font-bold">Організація:</p>
+            <p>{userProfile.full_name || "Невідома організація"}</p>
+          </Link>
+        )}
       </div>
 
       <div className="flex gap-2">

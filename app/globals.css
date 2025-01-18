@@ -173,14 +173,10 @@ body,
   background: #48433C;
 }
 
+nextjs-portal {
+  display: none !important;
+}
+
 @import "@uploadthing/react/styles.css";
 
 
-/* @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-} */

@@ -20,7 +20,7 @@ import { ComboBox } from "@/components/custom/ComboBox";
 import FileUpload from "@/components/custom/FileUpload";
 import Link from "next/link";
 import axios from "axios";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { DatePicker } from "@/components/ui/date-picker";
 import Delete from "@/components/custom/Delete";

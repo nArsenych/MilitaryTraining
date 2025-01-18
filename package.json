@@ -61,5 +61,10 @@
   },
   "prisma": {
     "seed": "ts-node ./scripts/seed.ts"
-  }
+  },
+  "eslintConfig": {
+    "rules": {
+        "no-var": 0
+    }
+}
 }

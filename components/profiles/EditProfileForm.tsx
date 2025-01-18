@@ -4,7 +4,6 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Profile } from "@prisma/client";
-import { AxiosError } from "axios";
 
 import { Button } from "@/components/ui/button"
 import {

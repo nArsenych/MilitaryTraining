@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-// Правильне оголошення глобальних типів
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 

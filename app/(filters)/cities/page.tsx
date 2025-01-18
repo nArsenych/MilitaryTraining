@@ -13,7 +13,7 @@ export default async function Citiess() {
   const courses = await getCoursesByCity(null);
   return (
     <div className="md:px-10 xl:px-16 pb-16 bg-[#4E4C4B] min-h-screen pt-5">
-      <Cities cities={cities} selectedCity={null} />
+      <Cities cities={cities}/>
       <div className="flex flex-wrap gap-7 justify-center">
         {courses.map((course) => (
           <CourseCard key={course.id} course={course} />

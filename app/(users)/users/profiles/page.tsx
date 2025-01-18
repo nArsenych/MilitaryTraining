@@ -55,7 +55,7 @@ const CourseOverview = async ({ }: { params: { profileId: string } }) => {
 
       <div className="flex gap-2">
         <p className="text-[#ebac66] font-bold">Вік:</p>
-        <p>${profile.age}</p>
+        <p>{profile.age}</p>
       </div>
 
       <div className="flex gap-2">
